@@ -1,39 +1,20 @@
 // =========================
-// FETCH HEXIUM LIMITEDS
+// /api/fetch-limiteds
 // =========================
-// Sweeps asset IDs against Hexium's catalog/items/details endpoint,
-// keeps only items flagged as Limited/LimitedUnique/Collectible, and
-// writes the result to data/items.json in the shape the site expects.
+// Vercel serverless function (real Node.js, server-side -- no CORS
+// issues calling hexium.zip). Visit this URL directly in your browser
+// to run a sweep and get back JSON.
 //
-// Usage:
-//   node scripts/fetch-limiteds.js [maxId] [batchSize]
+// Usage (as a URL in your browser, on your deployed site):
+//   https://heximons.vercel.app/api/fetch-limiteds?start=1&end=1000
 //
-// Examples:
-//   node scripts/fetch-limiteds.js            # sweeps 1-6000, batch 50
-//   node scripts/fetch-limiteds.js 8000        # sweeps 1-8000
-//   node scripts/fetch-limiteds.js 8000 100    # sweeps 1-8000, batch 100
-//
-// Requires Node 18+ (built-in fetch). Run with:
-//   node scripts/fetch-limiteds.js
-//
-// IMPORTANT: This calls hexium.zip directly from your machine (not
-// through the Vercel proxy), so it is NOT subject to the browser CORS
-// restriction mentioned in the README — that restriction only applies
-// to requests made from a browser tab.
-
-const fs = require("fs");
-const path = require("path");
+// Do a few ranges at a time (e.g. 1-1000, 1001-2000, ...) to stay
+// under Vercel's function time limit. Copy each response and send it
+// back, and it'll get merged into data/items.json.
 
 const DETAILS_URL = "https://hexium.zip/apisite/catalog/v1/catalog/items/details";
-const OUTPUT_PATH = path.join(__dirname, "..", "data", "items.json");
+const BATCH_SIZE = 100;
 
-const MAX_ID = Number(process.argv[2] || 6000);
-const BATCH_SIZE = Number(process.argv[3] || 50);
-const REQUEST_DELAY_MS = 150; // be polite to the server between batches
-
-// Known Roblox-style assetType IDs -> friendly names.
-// Extend this if Hexium uses different codes; unknown codes fall back
-// to "Unknown" and are logged so you can add them.
 const ASSET_TYPE_NAMES = {
     8: "Hat",
     41: "HairAccessory",
@@ -48,10 +29,6 @@ const ASSET_TYPE_NAMES = {
     19: "Gear",
     2: "Face"
 };
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 function isLimitedItem(item) {
     const restrictions = item.itemRestrictions || item.ItemRestrictions || [];
@@ -73,7 +50,6 @@ function mapItem(item) {
     const name = String(item.name ?? item.Name ?? "Unknown Item");
     const assetTypeId = Number(item.assetType ?? item.AssetType ?? 0);
     const type = ASSET_TYPE_NAMES[assetTypeId] || "Unknown";
-
     const price = Number(item.price ?? item.Price ?? 0);
     const totalQuantity = item.totalQuantity ?? item.TotalQuantity ?? null;
 
@@ -84,10 +60,6 @@ function mapItem(item) {
         type,
         category: "Hexium Limited",
         rarity: "",
-        // Hexium's catalog endpoint doesn't expose RAP/value/demand/trend
-        // analytics (Roblox itself doesn't either -- that's what
-        // Rolimons-style trackers compute separately). These default to
-        // placeholders here and are meant to be set via the admin panel.
         value: price || 0,
         rap: 0,
         rapAfterSale: 0,
@@ -123,87 +95,56 @@ async function fetchBatch(ids) {
     });
 
     if (!response.ok) {
-        throw new Error(
-            `Batch [${ids[0]}-${ids[ids.length - 1]}] failed: HTTP ${response.status}`
-        );
+        return { ok: false, ids, status: response.status };
     }
 
     const payload = await response.json();
-
-    // Real Roblox-style responses wrap results in { data: [...] }.
-    // Fall back to a bare array in case Hexium responds differently.
-    return Array.isArray(payload?.data)
+    const results = Array.isArray(payload?.data)
         ? payload.data
         : Array.isArray(payload)
             ? payload
             : [];
+
+    return { ok: true, results };
 }
 
-async function main() {
-    console.log(`Sweeping asset IDs 1-${MAX_ID} in batches of ${BATCH_SIZE}...`);
+export default async function handler(req, res) {
+    const start = Math.max(1, Number(req.query.start || 1));
+    const end = Math.max(start, Number(req.query.end || start + 999));
 
-    const allIds = Array.from({ length: MAX_ID }, (_, i) => i + 1);
+    if (end - start > 2000) {
+        res.status(400).json({
+            error: "Range too large. Keep (end - start) under 2000 to avoid timing out."
+        });
+        return;
+    }
+
+    const ids = [];
+    for (let i = start; i <= end; i++) ids.push(i);
+
     const limiteds = [];
-    let checked = 0;
-    let errors = 0;
+    const failedBatches = [];
 
-    for (let i = 0; i < allIds.length; i += BATCH_SIZE) {
-        const batch = allIds.slice(i, i + BATCH_SIZE);
+    for (let i = 0; i < ids.length; i += BATCH_SIZE) {
+        const batch = ids.slice(i, i + BATCH_SIZE);
+        const result = await fetchBatch(batch);
 
-        try {
-            const results = await fetchBatch(batch);
-
-            results.forEach(item => {
-                if (isLimitedItem(item)) {
-                    limiteds.push(mapItem(item));
-                }
-            });
-        }
-        catch (error) {
-            errors += 1;
-            console.warn(error.message);
+        if (!result.ok) {
+            failedBatches.push({ ids: batch, status: result.status });
+            continue;
         }
 
-        checked += batch.length;
-
-        if (checked % 500 === 0 || checked === allIds.length) {
-            console.log(
-                `  ...checked ${checked}/${allIds.length} (found ${limiteds.length} limiteds so far)`
-            );
-        }
-
-        await sleep(REQUEST_DELAY_MS);
+        result.results.forEach(item => {
+            if (isLimitedItem(item)) {
+                limiteds.push(mapItem(item));
+            }
+        });
     }
 
-    // Re-number sequential ids for the site's internal use, but keep
-    // the real Hexium asset id around too in case it's needed later.
-    const finalItems = limiteds.map((item, index) => ({
-        ...item,
-        siteId: index + 1
-    }));
-
-    fs.writeFileSync(
-        OUTPUT_PATH,
-        JSON.stringify(finalItems, null, 4),
-        "utf8"
-    );
-
-    console.log(`\nDone. Found ${finalItems.length} limiteds.`);
-    console.log(`Failed batches: ${errors}`);
-    console.log(`Written to ${OUTPUT_PATH}`);
-
-    if (finalItems.length === 0) {
-        console.log(
-            "\nNo limiteds found. This usually means the itemRestrictions " +
-            "field uses different values than expected. Re-run with a " +
-            "small MAX_ID (e.g. 20) and add a console.log(item) inside " +
-            "fetchBatch's results.forEach to inspect the raw shape, then " +
-            "tell me what you see so I can fix the isLimitedItem() check."
-        );
-    }
+    res.status(200).json({
+        rangeChecked: { start, end },
+        foundCount: limiteds.length,
+        failedBatches,
+        items: limiteds
+    });
 }
-
-main().catch(error => {
-    console.error("Fatal error:", error);
-    process.exit(1);
-});
