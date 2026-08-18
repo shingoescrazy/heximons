@@ -124,7 +124,9 @@
         );
     }
 
-    async function request(path, options = {}) {
+    let cachedCsrfToken = "";
+
+    async function request(path, options = {}, isRetry = false) {
         const url = buildUrl(path);
         const controller = new AbortController();
         const timeoutMs = Number(options.timeoutMs || DEFAULT_TIMEOUT_MS);
@@ -140,6 +142,10 @@
             headers.set("Content-Type", "application/json");
         }
 
+        if (cachedCsrfToken && !headers.has("X-CSRF-TOKEN")) {
+            headers.set("X-CSRF-TOKEN", cachedCsrfToken);
+        }
+
         try {
             const response = await fetch(url, {
                 method: options.method || "GET",
@@ -149,6 +155,19 @@
                 credentials: options.credentials || "same-origin",
                 cache: options.cache || "no-store"
             });
+
+            // Roblox-style CSRF protection: a POST/PUT/DELETE without a
+            // valid token gets rejected once with a fresh token in the
+            // response headers. Capture it and retry automatically.
+            const freshToken = response.headers.get("x-csrf-token");
+            if (freshToken) {
+                cachedCsrfToken = freshToken;
+            }
+
+            if (response.status === 403 && freshToken && !isRetry) {
+                window.clearTimeout(timeoutId);
+                return request(path, options, true);
+            }
 
             const body = await readResponseBody(response);
 
