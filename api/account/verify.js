@@ -1,17 +1,16 @@
 // =========================
 // /api/account/verify
 // =========================
-// POST { userId: 123 }
-// Fetches the user's Hexium profile, checks whether their stored
-// verification phrase appears in their bio/description, and if so
-// marks the link verified and issues a session token.
+// POST { userId: 123, bio: "...current hexium bio text..." }
+// The client fetches the user's current Hexium bio via the browser
+// (same reason as start-link -- Hexium blocks server-to-server calls
+// to some endpoints) and sends it here. This checks it against the
+// stored phrase and, if it matches, issues a session token.
 //
 // Response: { verified: true, token, username } or { verified: false }
 
 const crypto = require("crypto");
 const { getPool } = require("../_db");
-
-const HEXIUM_BASE = "https://hexium.zip";
 
 module.exports = async (req, res) => {
     if (req.method !== "POST") {
@@ -21,6 +20,7 @@ module.exports = async (req, res) => {
 
     try {
         const userId = Number(req.body?.userId);
+        const bio = String(req.body?.bio || "");
 
         if (!Number.isInteger(userId) || userId <= 0) {
             res.status(400).json({ error: "Invalid userId" });
@@ -38,18 +38,6 @@ module.exports = async (req, res) => {
             res.status(404).json({ error: "No pending link found for this user. Start linking again." });
             return;
         }
-
-        const profileResponse = await fetch(
-            `${HEXIUM_BASE}/apisite/users/v1/users/${userId}`
-        );
-
-        if (!profileResponse.ok) {
-            res.status(502).json({ error: "Could not fetch Hexium profile." });
-            return;
-        }
-
-        const profile = await profileResponse.json();
-        const bio = String(profile?.description ?? profile?.Description ?? "");
 
         if (!bio.includes(record.verification_phrase)) {
             res.status(200).json({
