@@ -1,5 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/sweep-limiteds.js": {
+      "maxDuration": 60
+    }
+  },
   "rewrites": [
     {
       "source": "/apisite/:path*",
