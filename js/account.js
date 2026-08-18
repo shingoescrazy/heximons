@@ -55,7 +55,7 @@
         box.innerHTML = `
             <p class="catalog-toolbar">
                 Link your Hexium account to Heximons. Go to your Hexium profile page \u2014
-                the number in the URL (e.g. hexium.zip/users/<strong>4</strong>/profile) is your User ID.
+                the number in the URL (e.g. hexium.zip/users/<strong>1234</strong>/profile) is your User ID.
             </p>
             <input id="linkUsernameInput" type="text" inputmode="numeric" placeholder="Your Hexium User ID (numbers only)" class="search-lg">
             <button class="btn btn-primary" id="linkStartBtn">Get Verification Phrase</button>
