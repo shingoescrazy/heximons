@@ -97,10 +97,17 @@
         showStatus("Looking up your account...");
 
         try {
+            const user = await window.hexiumLookupUsername(username);
+
+            if (!user) {
+                showStatus("No Hexium user found with that username.");
+                return;
+            }
+
             const response = await fetch("/api/account/start-link", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username })
+                body: JSON.stringify({ userId: user.id, username: user.name })
             });
 
             const data = await response.json();
@@ -123,10 +130,13 @@
         showStatus("Checking your Hexium bio...");
 
         try {
+            const profile = await window.hexiumGetUser(currentUserId);
+            const bio = String(profile?.description ?? profile?.Description ?? "");
+
             const response = await fetch("/api/account/verify", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId: currentUserId })
+                body: JSON.stringify({ userId: currentUserId, bio })
             });
 
             const data = await response.json();
