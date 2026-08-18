@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Heximons | Roblox Trading Analytics</title>
+
+<link rel="icon" type="image/png" href="favicon.png">
+
+<link rel="stylesheet" href="./css/style.css">
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar">
+
+
+<div class="logo">
+
+<img src="logo.png" alt="Heximons">
+
+</div>
+
+
+
+
+<div class="nav-links">
+
+
+<button class="nav-btn" onclick="showPage('home')">
+Home
+</button>
+
+
+<button class="nav-btn" onclick="showPage('catalog')">
+Catalog
+</button>
+
+
+<button class="nav-btn" onclick="showPage('deals')">
+Deals
+</button>
+
+
+
+
+
+<!-- TRADING DROPDOWN -->
+
+<div class="dropdown-container">
+
+
+<button class="nav-btn" id="tradingBtn">
+Trading ▼
+</button>
+
+
+<div class="dropdown" id="tradingDropdown">
+
+
+<button onclick="showPage('projecteds')">
+Projecteds
+</button>
+
+
+<button onclick="showPage('valueChanges')">
+Value Changes
+</button>
+
+
+<button onclick="showPage('tradeAds')">
+Trade Ads
+</button>
+
+
+<button onclick="showPage('calculator')">
+Trading Calculator
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<!-- PLAYERS DROPDOWN -->
+
+<div class="dropdown-container">
+
+
+<button class="nav-btn" id="playersBtn">
+Players ▼
+</button>
+
+
+<div class="dropdown" id="playersDropdown">
+
+
+<button onclick="showPage('playerLookup')">
+Player Lookup
+</button>
+
+
+<button onclick="showPage('playerLeaderboard')">
+Player Leaderboard
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<input
+class="search"
+id="searchBar"
+placeholder="Search Limiteds..."
+>
+
+
+</div>
+
+
+</nav>
+
+<!-- =========================
+     HOME
+========================= -->
+
+
+<div id="home" class="page active">
+
+
+<!-- HERO -->
+<section class="hero">
+
+<div class="hero-hexfield" aria-hidden="true"></div>
+
+<div class="hero-inner">
+
+<span class="hero-eyebrow">Roblox Trading Analytics</span>
+
+<img
+class="hero-logo"
+src="logo.png"
+alt="Heximons Logo"
+>
+
+
+
+<p class="hero-sub">
+Heximons tracks RAP, value, demand and trend for every limited item —
+so you can trade with data, not guesswork.
+</p>
+
+<div class="hero-actions">
+
+<button class="btn btn-primary" onclick="showPage('catalog')">
+Browse Catalog
+</button>
+
+<button class="btn btn-ghost" onclick="showPage('calculator')">
+Trading Calculator
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- EXPLORE STRIP -->
+<section class="explore-strip">
+
+<button class="explore-pill" onclick="showPage('catalog')">
+<span class= aria-hidden="true"></span>
+Catalog
+</button>
+
+<button class="explore-pill" onclick="showPage('valueChanges')">
+<span class= aria-hidden="true"></span>
+Value Changes
+</button>
+
+<button class="explore-pill" onclick="showPage('projecteds')">
+<span class= aria-hidden="true"></span>
+Projecteds
+</button>
+
+<button class="explore-pill" onclick="showPage('tradeAds')">
+<span class= aria-hidden="true"></span>
+Trade Ads
+</button>
+
+<button class="explore-pill" onclick="showPage('calculator')">
+<span class= aria-hidden="true"></span>
+Trading Calculator
+</button>
+
+
+
+</section>
+
+
+<!-- NEW LIMITEDS -->
+<section class="home-section">
+
+<div class="section-head">
+<h2 class="section-title-sm">New Limiteds</h2>
+<button class="link-btn" onclick="showPage('catalog')">View all →</button>
+</div>
+
+<div id="newLimitedsRow" class="item-row">
+<!-- populated by js/limiteds.js -->
+</div>
+
+</section>
+
+
+<!-- FEATURES -->
+<section class="home-section">
+
+<h2 class="section-title-sm center">Features</h2>
+
+<div class="features-grid">
+
+<div class="feature-card">
+<h3>Catalog</h3>
+<p>Browse every limited with thumbnails, filtering and sorting by value, RAP or demand.</p>
+<button class="btn btn-small" onclick="showPage('catalog')">Catalog</button>
+</div>
+
+<div class="feature-card">
+<h3>Trading Calculator</h3>
+<p>Weigh up any trade instantly — compare value and RAP on both sides before you accept.</p>
+<button class="btn btn-small" onclick="showPage('calculator')">Trading Calculator</button>
+</div>
+
+<div class="feature-card">
+<h3>Value Changes</h3>
+<p>Track recent shifts in value, demand and trend so you never trade on stale info.</p>
+<button class="btn btn-small" onclick="showPage('valueChanges')">Value Changes</button>
+</div>
+
+<div class="feature-card">
+<h3>Projecteds</h3>
+<p>Spot items projected to drop in value before the market catches up.</p>
+<button class="btn btn-small" onclick="showPage('projecteds')">Projecteds</button>
+</div>
+
+<div class="feature-card">
+<h3>Trade Ads</h3>
+<p>Browse live trade ads from the community, or post your own to reach more traders.</p>
+<button class="btn btn-small" onclick="showPage('tradeAds')">Trade Ads</button>
+</div>
+
+<div class="feature-card">
+<h3>Search</h3>
+<p>Find any limited by name in seconds using the search bar in the navigation.</p>
+<button class="btn btn-small" onclick="document.getElementById('searchBar').focus()">Search</button>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- COMMUNITY -->
+<section class="community-strip">
+
+<h2>Built with the trading community</h2>
+<p>Values are only useful when traders help keep them honest. Join in.</p>
+
+<div class="community-actions">
+
+<a
+class="btn btn-primary"
+href="https://discord.gg/hexium"
+target="_blank"
+rel="noopener noreferrer"
+>
+Join the Discord
+</a>
+
+<button class="btn btn-ghost" onclick="showPage('about')">
+About Me
+</button>
+
+</div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer class="site-footer">
+
+<div class="footer-grid">
+
+<div class="footer-brand">
+<img src="logo.png" alt="Heximons" class="footer-logo">
+<p>Heximons is a fan-made Roblox limited item values &amp; trading resource.</p>
+</div>
+
+<div class="footer-col">
+<h4>Trading</h4>
+<a onclick="showPage('catalog')">Catalog</a>
+<a onclick="showPage('calculator')">Trading Calculator</a>
+<a onclick="showPage('valueChanges')">Value Changes</a>
+<a onclick="showPage('tradeAds')">Trade Ads</a>
+</div>
+
+<div class="footer-col">
+<h4>Community</h4>
+<a href="https://discord.gg/hexium" target="_blank" rel="noopener noreferrer">Discord</a>
+<a onclick="showPage('about')">About</a>
+</div>
+
+</div>
+
+<p class="footer-note">Heximons is not affiliated with Roblox Corporation.</p>
+
+</footer>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =========================
+     CATALOG
+========================= -->
+
+
+<div id="catalog" class="page">
+
+
+<h1 class="section-title">
+Limited Catalog
+</h1>
+
+
+<p class="catalog-toolbar">
+Values and RAP sourced from Rolimon's.
+</p>
+
+
+<div class="catalog-filters">
+<button class="catalog-filter-btn active" id="filterHighestValue" onclick="window.toggleValueSort()">Highest Value</button>
+<button class="catalog-filter-btn" data-panel="itemTypes" onclick="window.toggleCatalogFilter(this)">Item Types</button>
+<button class="catalog-filter-btn" data-panel="demand" onclick="window.toggleCatalogFilter(this)">Demand</button>
+<button class="catalog-filter-btn" data-panel="trend" onclick="window.toggleCatalogFilter(this)">Trend</button>
+<button class="catalog-filter-btn" data-panel="categories" onclick="window.toggleCatalogFilter(this)">Categories</button>
+<button class="catalog-filter-btn" data-panel="rangeFilters" onclick="window.toggleCatalogFilter(this)">Range Filters</button>
+</div>
+
+
+<div class="catalog-search">
+<input type="text" id="catalogSearchBar" placeholder="Search">
+</div>
+
+
+<div class="catalog-filter-panels" id="catalogFilterPanels">
+
+<div class="filter-panel" id="panel-itemTypes">
+  <div class="filter-panel-header">
+    <span>Item Types</span>
+    <button class="filter-panel-close" onclick="window.closeFilterPanel('itemTypes')">&times;</button>
+  </div>
+  <div class="filter-panel-options">
+    <button class="filter-pill" data-group="types" data-value="Hats" onclick="window.toggleFilterPill(this)">Hats</button>
+    <button class="filter-pill" data-group="types" data-value="Faces" onclick="window.toggleFilterPill(this)">Faces</button>
+    <button class="filter-pill" data-group="types" data-value="Gears" onclick="window.toggleFilterPill(this)">Gears</button>
+    <button class="filter-pill" data-group="types" data-value="Hair" onclick="window.toggleFilterPill(this)">Hair</button>
+    <button class="filter-pill" data-group="types" data-value="Face" onclick="window.toggleFilterPill(this)">Face</button>
+    <button class="filter-pill" data-group="types" data-value="Neck" onclick="window.toggleFilterPill(this)">Neck</button>
+    <button class="filter-pill" data-group="types" data-value="Shoulder" onclick="window.toggleFilterPill(this)">Shoulder</button>
+    <button class="filter-pill" data-group="types" data-value="Front" onclick="window.toggleFilterPill(this)">Front</button>
+    <button class="filter-pill" data-group="types" data-value="Back" onclick="window.toggleFilterPill(this)">Back</button>
+    <button class="filter-pill" data-group="types" data-value="Waist" onclick="window.toggleFilterPill(this)">Waist</button>
+  </div>
+</div>
+
+<div class="filter-panel" id="panel-demand">
+  <div class="filter-panel-header">
+    <span>Demand</span>
+    <button class="filter-panel-close" onclick="window.closeFilterPanel('demand')">&times;</button>
+  </div>
+  <div class="filter-panel-options">
+    <button class="filter-pill" data-group="demand" data-value="High" onclick="window.toggleFilterPill(this)">High</button>
+    <button class="filter-pill" data-group="demand" data-value="Decent" onclick="window.toggleFilterPill(this)">Decent</button>
+    <button class="filter-pill" data-group="demand" data-value="Low" onclick="window.toggleFilterPill(this)">Low</button>
+    <button class="filter-pill" data-group="demand" data-value="Terrible" onclick="window.toggleFilterPill(this)">Terrible</button>
+    <button class="filter-pill" data-group="demand" data-value="Unassigned" onclick="window.toggleFilterPill(this)">Unassigned</button>
+  </div>
+</div>
+
+<div class="filter-panel" id="panel-trend">
+  <div class="filter-panel-header">
+    <span>Trend</span>
+    <button class="filter-panel-close" onclick="window.closeFilterPanel('trend')">&times;</button>
+  </div>
+  <div class="filter-panel-options">
+    <button class="filter-pill" data-group="trend" data-value="Raising" onclick="window.toggleFilterPill(this)">Raising</button>
+    <button class="filter-pill" data-group="trend" data-value="Stable" onclick="window.toggleFilterPill(this)">Stable</button>
+    <button class="filter-pill" data-group="trend" data-value="Lowering" onclick="window.toggleFilterPill(this)">Lowering</button>
+    <button class="filter-pill" data-group="trend" data-value="Unstable" onclick="window.toggleFilterPill(this)">Unstable</button>
+    <button class="filter-pill" data-group="trend" data-value="Fluctuating" onclick="window.toggleFilterPill(this)">Fluctuating</button>
+  </div>
+</div>
+
+<div class="filter-panel" id="panel-categories">
+  <div class="filter-panel-header">
+    <span>Categories</span>
+    <button class="filter-panel-close" onclick="window.closeFilterPanel('categories')">&times;</button>
+  </div>
+  <div class="filter-panel-options">
+    <button class="filter-pill" data-group="categories" data-value="onlyRares" onclick="window.toggleFilterPill(this)">Only Rares</button>
+    <button class="filter-pill" data-group="categories" data-value="onlyProjecteds" onclick="window.toggleFilterPill(this)">Only Projecteds</button>
+    <button class="filter-pill" data-group="categories" data-value="tablets" onclick="window.toggleFilterPill(this)">Tablets</button>
+    <button class="filter-pill" data-group="categories" data-value="unobtainables" onclick="window.toggleFilterPill(this)">Unobtainables</button>
+    <button class="filter-pill" data-group="categories" data-value="hoarded" onclick="window.toggleFilterPill(this)">Hoarded</button>
+    <button class="filter-pill" data-group="categories" data-value="valued" onclick="window.toggleFilterPill(this)">Valued</button>
+  </div>
+</div>
+
+<div class="filter-panel" id="panel-rangeFilters">
+  <div class="filter-panel-header">
+    <span>Range Filters</span>
+    <button class="filter-panel-close" onclick="window.closeFilterPanel('rangeFilters')">&times;</button>
+  </div>
+  <div class="filter-range-group">
+    <label>Value</label>
+    <div class="filter-range-inputs">
+      <input type="text" inputmode="numeric" placeholder="Min" data-range="valueMin" oninput="window.applyRangeFilter(this)">
+      <input type="text" inputmode="numeric" placeholder="Max" data-range="valueMax" oninput="window.applyRangeFilter(this)">
+    </div>
+  </div>
+  <div class="filter-range-group">
+    <label>RAP</label>
+    <div class="filter-range-inputs">
+      <input type="text" inputmode="numeric" placeholder="Min" data-range="rapMin" oninput="window.applyRangeFilter(this)">
+      <input type="text" inputmode="numeric" placeholder="Max" data-range="rapMax" oninput="window.applyRangeFilter(this)">
+    </div>
+  </div>
+  <button class="filter-clear-btn" onclick="window.clearAllCatalogFilters()">Clear All Filters</button>
+</div>
+
+</div>
+
+
+<div class="catalog-pagination" id="catalogPagination"></div>
+
+
+<div id="catalogGrid" class="catalog-grid">
+
+Loading items...
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+<!-- =========================
+     ITEM DETAIL PAGE
+========================= -->
+
+
+<div id="itemPage" class="page">
+
+<div class="item-page-wrap" id="itemDetails">
+<!-- populated by js/item-page.js -->
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- =========================
+     PROJECTEDS
+========================= -->
+
+
+<div id="projecteds" class="page">
+
+
+<h1 class="section-title">
+Projecteds
+</h1>
+
+<div class="info-callout">
+
+<h2>Projected Items</h2>
+
+<p>
+Projected items are limiteds that have been intentionally sold at high
+prices to artificially inflate their RAP (Recent Average Price). This
+can make an item look more valuable than it really is to traders who
+don't understand projections.
+</p>
+
+<p>
+Projections typically don't last long, since projected items usually
+sell far below their inflated RAP soon after. It's usually best to
+avoid trading for these items unless you're experienced enough to
+handle them safely.
+</p>
+
+</div>
+
+<p class="preview-note">Sample preview — live projected items will appear here once tracking goes live.</p>
+
+<div class="projected-preview-card">
+
+<div class="ppc-name">Night Vision Goggles</div>
+
+<div class="ppc-frame">
+<span style="font-size:56px;" aria-hidden="true">&#129405;</span>
+</div>
+
+<div class="ppc-warn">
+<span class="warn-tag">!</span>
+</div>
+
+<div class="ppc-stats">
+
+<div class="ppc-stat-row ppc-price">
+<span>Price</span>
+<b>1,000,000</b>
+</div>
+
+<div class="ppc-stat-row ppc-rap">
+<span>RAP</span>
+<b>522,524</b>
+</div>
+
+<div class="ppc-stat-row ppc-value">
+<span>Value</span>
+<b>120,000</b>
+</div>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<!-- =========================
+     VALUE CHANGES
+========================= -->
+
+
+<div id="valueChanges" class="page">
+
+
+<h1 class="section-title">
+Value Changes
+</h1>
+
+
+<p class="preview-note">Sample preview — recent value changes will appear here once tracking goes live.</p>
+
+<div class="value-change-card">
+
+<div class="vc-name">Beautiful Hair for Beautifu...</div>
+
+<div class="vc-label">Value Changed</div>
+
+<div class="vc-detail">
+<span>Old</span>
+<b class="vc-old">8,000</b>
+</div>
+
+<div class="vc-detail">
+<span>New</span>
+<span class="vc-new down">&#9660; 7,000</span>
+</div>
+
+<div class="vc-time">14 hours ago &middot; 2026-07-11 11:02:55 PM</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =========================
+     TRADE ADS
+========================= -->
+
+
+<div id="tradeAds" class="page">
+
+
+<!-- ADS HERO -->
+<section class="ads-hero">
+
+<div class="ads-hero-inner">
+
+<h1>Trade Ads</h1>
+
+<p>
+Browse trade ads from other active Heximons traders or create your
+own. Trade ads help connect traders so you get more trades completed!
+</p>
+
+<div class="ads-hero-actions">
+
+<button class="btn btn-primary" onclick="showPage('createTradeAd')">
+Create Ad
+</button>
+
+<button class="btn btn-primary" onclick="refreshTradeAds()">
+Refresh Ads
+</button>
+
+</div>
+
+</div>
+
+
+</section>
+
+
+<!-- FILTERS -->
+<div class="ads-filters">
+
+<div class="ads-filter-col">
+
+<h3>Offer Filters</h3>
+
+<label for="offerFilterInput">Item Name</label>
+
+<input
+id="offerFilterInput"
+type="text"
+placeholder="Search offered items..."
+>
+
+<div class="ads-filter-buttons">
+
+<button
+class="icon-btn active"
+id="offerSortBtn"
+title="Sort by offer value"
+onclick="toggleOfferSort()"
+>
+<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 8l-3 5h6l-3-5zM19 8l-3 5h6l-3-5zM5 8h14"/></svg>
+</button>
+
+</div>
+
+</div>
+
+<div class="ads-filter-col">
+
+<h3>Request Filters</h3>
+
+<label for="requestFilterInput">Item Name</label>
+
+<input
+id="requestFilterInput"
+type="text"
+placeholder="Search requested items..."
+>
+
+<div class="ads-filter-buttons">
+
+<button
+class="icon-btn active"
+id="requestSortBtn"
+title="Sort by request value"
+onclick="toggleRequestSort()"
+>
+<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 8l-3 5h6l-3-5zM19 8l-3 5h6l-3-5zM5 8h14"/></svg>
+</button>
+
+<button
+class="icon-btn"
+id="requestAnyBtn"
+title="Only show ads requesting Any"
+onclick="toggleRequestAnyFilter()"
+>
+<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L4 3a1 1 0 0 0-1 1l.24 5.59a2 2 0 0 0 .59 1.41l9.58 9.58a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.82Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- PAGINATION (TOP) -->
+<div class="ads-pagination" id="adsPaginationTop"></div>
+
+
+<!-- ADS LIST -->
+<div id="tradeAdsList" class="trade-ads-list">
+Loading trade ads...
+</div>
+
+
+<!-- PAGINATION (BOTTOM) -->
+<div class="ads-pagination" id="adsPaginationBottom"></div>
+
+
+</div>
+
+
+<!-- CREATE AD MODAL -->
+<div id="createAdModal" class="modal-backdrop">
+
+<div class="modal-card">
+
+<div class="modal-header">
+
+<h2>Create Trade Ad</h2>
+
+<button class="modal-close" onclick="closeCreateAdModal()">✕</button>
+
+</div>
+
+<div class="modal-sides">
+
+<div class="modal-side">
+
+<h4>Offering</h4>
+
+<div class="slots" id="newAdOfferSlots">
+<div class="trade-slot" data-side="newOffer" data-index="0">+</div>
+<div class="trade-slot" data-side="newOffer" data-index="1">+</div>
+<div class="trade-slot" data-side="newOffer" data-index="2">+</div>
+<div class="trade-slot" data-side="newOffer" data-index="3">+</div>
+</div>
+
+</div>
+
+<div class="modal-side">
+
+<h4>Requesting</h4>
+
+<div class="slots" id="newAdRequestSlots">
+<div class="trade-slot" data-side="newRequest" data-index="0">+</div>
+<div class="trade-slot" data-side="newRequest" data-index="1">+</div>
+<div class="trade-slot" data-side="newRequest" data-index="2">+</div>
+<div class="trade-slot" data-side="newRequest" data-index="3">+</div>
+</div>
+
+<button class="btn btn-small" onclick="addAnyWildcard()">
++ Add "Any" Slot
+</button>
+
+</div>
+
+</div>
+
+<div class="modal-toggle" id="newAdSideToggle">
+
+<button class="side-btn active" data-side="newOffer">
+Add to Offering
+</button>
+
+<button class="side-btn" data-side="newRequest">
+Add to Requesting
+</button>
+
+</div>
+
+<div id="newAdItemPicker" class="modal-item-picker">
+Loading items...
+</div>
+
+<div class="modal-footer">
+
+<button class="btn btn-ghost" onclick="closeCreateAdModal()">Cancel</button>
+
+<button class="btn btn-primary" onclick="submitNewAd()">Post Ad</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- =========================
+     CREATE TRADE AD PAGE
+========================= -->
+
+<div id="createTradeAd" class="page">
+
+<div class="create-ad-header">
+<button class="btn btn-ghost" onclick="showPage('tradeAds')">← Back to Ads</button>
+<h1>Create Trade Ad</h1>
+</div>
+
+<div class="create-ad-container">
+
+<!-- OFFER SIDE -->
+<div class="trade-side">
+<h2>Offer</h2>
+
+<div class="slots" id="createAdOfferSlots">
+<div class="trade-slot" data-side="createOffer" data-index="0">+</div>
+<div class="trade-slot" data-side="createOffer" data-index="1">+</div>
+<div class="trade-slot" data-side="createOffer" data-index="2">+</div>
+<div class="trade-slot" data-side="createOffer" data-index="3">+</div>
+</div>
+
+<div class="robux-box">
+<label>Robux</label>
+<input id="createAdOfferRobux" type="number" value="0">
+</div>
+
+<div class="trade-total">
+<p>Value: <span id="createAdOfferValue">0</span></p>
+<p>RAP: <span id="createAdOfferRap">0</span></p>
+</div>
+</div>
+
+<!-- REQUEST SIDE -->
+<div class="trade-side">
+<h2>Request</h2>
+
+<div class="slots" id="createAdRequestSlots">
+<div class="trade-slot" data-side="createRequest" data-index="0">+</div>
+<div class="trade-slot" data-side="createRequest" data-index="1">+</div>
+<div class="trade-slot" data-side="createRequest" data-index="2">+</div>
+<div class="trade-slot" data-side="createRequest" data-index="3">+</div>
+</div>
+
+<div class="robux-box">
+<label>Robux</label>
+<input id="createAdRequestRobux" type="number" value="0">
+</div>
+
+<div class="trade-total">
+<p>Value: <span id="createAdRequestValue">0</span></p>
+<p>RAP: <span id="createAdRequestRap">0</span></p>
+</div>
+</div>
+
+</div>
+
+<!-- ITEM PICKER -->
+<div class="create-ad-picker">
+<h2>Select Items</h2>
+
+<div class="side-toggle" id="createAdSideToggle">
+<button class="side-btn active" data-side="createOffer">Add to Offering</button>
+<button class="side-btn" data-side="createRequest">Add to Requesting</button>
+</div>
+
+<div id="createAdItemPicker" class="modal-item-picker">
+Loading items...
+</div>
+</div>
+
+<!-- SUBMIT BUTTON -->
+<div class="create-ad-submit">
+<button class="btn btn-ghost" onclick="showPage('tradeAds')">Cancel</button>
+<button class="btn btn-primary" onclick="submitCreateAd()">Post Ad</button>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     TRADING CALCULATOR
+========================= -->
+
+
+<div id="calculator" class="page">
+
+
+<h1 class="section-title">
+Trading Calculator
+</h1>
+
+
+
+
+<div class="calculator">
+
+
+
+<!-- OFFER -->
+
+<div class="trade-side">
+
+
+<h2>
+Offer
+</h2>
+
+
+
+<div class="slots" id="offerSlots">
+
+
+<div class="trade-slot" data-side="offer" data-index="0">+</div>
+
+<div class="trade-slot" data-side="offer" data-index="1">+</div>
+
+<div class="trade-slot" data-side="offer" data-index="2">+</div>
+
+<div class="trade-slot" data-side="offer" data-index="3">+</div>
+
+
+</div>
+
+
+
+
+
+<div class="robux-box">
+
+
+<label>
+Robux
+</label>
+
+
+<input
+id="offerRobux"
+type="number"
+value="0"
+>
+
+
+</div>
+
+
+
+
+
+<div class="trade-total">
+
+
+<p>
+Value:
+<span id="offerValue">
+0
+</span>
+</p>
+
+
+
+<p>
+RAP:
+<span id="offerRap">
+0
+</span>
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+<!-- REQUEST -->
+
+<div class="trade-side">
+
+
+<h2>
+Request
+</h2>
+
+
+
+
+<div class="slots" id="requestSlots">
+
+
+<div class="trade-slot" data-side="request" data-index="0">+</div>
+
+<div class="trade-slot" data-side="request" data-index="1">+</div>
+
+<div class="trade-slot" data-side="request" data-index="2">+</div>
+
+<div class="trade-slot" data-side="request" data-index="3">+</div>
+
+
+</div>
+
+
+
+
+
+<div class="robux-box">
+
+
+<label>
+Robux
+</label>
+
+
+<input
+id="requestRobux"
+type="number"
+value="0"
+>
+
+
+</div>
+
+
+
+
+
+<div class="trade-total">
+
+
+<p>
+Value:
+<span id="requestValue">
+0
+</span>
+</p>
+
+
+<p>
+RAP:
+<span id="requestRap">
+0
+</span>
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- DIFFERENCE -->
+
+
+<div class="trade-summary">
+
+
+<div>
+
+
+<h3>
+Difference
+</h3>
+
+
+<p>
+Value:
+<span id="valueDifference">
+0
+</span>
+</p>
+
+
+
+<p>
+RAP:
+<span id="rapDifference">
+0
+</span>
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ITEM SELECTOR -->
+
+
+<div class="calculator-items">
+
+
+<h2>
+Select Limited
+</h2>
+
+
+<div class="side-toggle" id="sideToggle">
+
+<button class="side-btn active" data-side="offer">
+Add to Offer
+</button>
+
+<button class="side-btn" data-side="request">
+Add to Request
+</button>
+
+</div>
+
+
+
+<div id="calculatorItems">
+
+Loading items...
+
+</div>
+
+
+</div>
+
+
+</div> <!-- CLOSES CALCULATOR PAGE -->
+
+
+
+<!-- =========================
+     DEALS
+========================= -->
+
+<div id="deals" class="page">
+
+
+<h1 class="section-title">
+Deals
+</h1>
+
+
+<div id="dealsGrid">
+
+Loading deals...
+
+</div>
+
+
+</div>
+
+<!-- =========================
+     PLAYER LOOKUP
+========================= -->
+
+<div id="playerLookup" class="page">
+
+
+<h1 class="section-title">
+Player Lookup
+</h1>
+
+<p class="catalog-toolbar">
+Look up any Hexium player by username.
+</p>
+
+<div class="player-lookup-box">
+
+<input
+id="playerSearch"
+class="search-lg"
+type="text"
+placeholder="Search players by username"
+>
+
+<button class="btn btn-primary" onclick="window.lookupPlayer()">
+Search
+</button>
+
+</div>
+
+<div id="playerResult">
+
+<div class="placeholder-card">
+Enter a username above to look them up.
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+<!-- =========================
+     PLAYER LEADERBOARD
+========================= -->
+
+<div id="playerLeaderboard" class="page">
+
+
+<h1 class="section-title">
+Player Leaderboard
+</h1>
+
+
+<div id="leaderboardPagination" class="leaderboard-pagination"></div>
+
+<div id="leaderboardGrid" class="leaderboard-grid">
+<div class="placeholder-card">Loading Hexium players...</div>
+</div>
+
+
+</div>
+
+
+
+<!-- =========================
+     ADMIN PANEL
+========================= -->
+
+<div id="admin" class="page">
+
+<h1 class="section-title">
+Admin Panel
+</h1>
+
+<div id="adminGate">
+
+<p class="catalog-toolbar">Enter the admin password to continue.</p>
+
+<input id="adminPasswordInput" type="password" placeholder="Admin password" class="search-lg">
+<button class="btn btn-primary" id="adminPasswordSubmit">Enter</button>
+
+</div>
+
+<div id="adminPanel" style="display:none;">
+
+<input id="adminSearchInput" type="text" placeholder="Search items..." class="search-lg">
+
+<div id="adminItemList" class="admin-item-list"></div>
+
+<div id="adminForm" style="display:none;" class="admin-form">
+
+<h3 id="adminSelectedName"></h3>
+
+<label>Value</label>
+<input id="adminValueInput" type="number">
+
+<label>RAP</label>
+<input id="adminRapInput" type="number">
+
+<label>Demand</label>
+<select id="adminDemandSelect">
+<option>Unassigned</option>
+<option>Terrible</option>
+<option>Low</option>
+<option>Decent</option>
+<option>High</option>
+</select>
+
+<label>Trend</label>
+<select id="adminTrendSelect">
+<option>Stable</option>
+<option>Raising</option>
+<option>Lowering</option>
+<option>Unstable</option>
+<option>Fluctuating</option>
+</select>
+
+<button class="btn btn-primary" id="adminSaveBtn">Save</button>
+
+<p id="adminStatus"></p>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- =========================
+     ABOUT
+========================= -->
+
+<div id="about" class="page">
+
+
+<h1 class="section-title">
+About Heximons
+</h1>
+
+
+<div class="about-content">
+
+<div class="about-card">
+
+<h3>What is Heximons?</h3>
+
+<p>
+Heximons is a fan-made Roblox limited item values and trading
+resource. It tracks RAP, value, demand and trend for limiteds so
+traders can make decisions with data instead of guesswork.
+</p>
+
+</div>
+
+<div class="about-card">
+
+<h3>Who's behind it?</h3>
+
+<p>
+Heximons is built and maintained by a small hobby project team of
+traders who wanted a cleaner way to browse values, run trade
+calculations, and check trade ads in one place.
+</p>
+
+</div>
+
+<div class="about-card">
+
+<h3>Get involved</h3>
+
+<p>
+Values are only useful when the community helps keep them honest.
+Join the Discord to report bad values, suggest features, or just
+talk trading.
+</p>
+
+<a
+class="btn btn-primary"
+href="https://discord.gg/hexium"
+target="_blank"
+rel="noopener noreferrer"
+>
+Join the Discord
+</a>
+
+</div>
+
+<div class="about-card">
+
+<h3>Connect Your Hexium Account</h3>
+
+<div id="linkAccountBox"></div>
+
+</div>
+
+<div class="about-card">
+
+<h3>Disclaimer</h3>
+
+<p>
+Heximons is not affiliated with, endorsed by, or sponsored by
+Roblox Corporation. All item names, images and trademarks belong
+to their respective owners.
+</p>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script src="./js/app.js"></script>
+<script src="./js/api.js"></script>
+<script src="./js/player.js"></script>
+<script src="./js/leaderboard.js"></script>
+<script src="./js/navigation.js"></script>
+<script src="./js/catalog.js"></script>
+<script src="./js/search.js"></script>
+<script src="./js/item-page.js"></script>
+<script src="./js/limiteds.js"></script>
+<script src="./js/deals.js"></script>
+<script src="./js/calculator.js"></script>
+<script src="./js/trade-ads.js"></script>
+<script src="./js/script.js"></script>
+<script src="./js/admin.js"></script>
+<script src="./js/account.js"></script>
+<div class="trade-ad-slots"></div>
+</body>
+
+</html>
