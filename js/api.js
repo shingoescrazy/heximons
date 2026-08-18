@@ -7,8 +7,9 @@
     "use strict";
 
     // In production on Vercel, use the Vercel origin. vercel.json
-    // transparently proxies /apisite/* to https://hexium.zip/apisite/*,
-    // which avoids browser CORS restrictions.
+    // transparently proxies /apisite/* to https://hexium.zip/apisite/*.
+    // api.js itself requests /apisite/*, so vercel.json must match that
+    // exact prefix (not /api/*).
     //
     // During local development, keep using the real Hexium host so Live
     // Server continues to work with the backend's localhost CORS policy.
