@@ -53,8 +53,11 @@
     function renderUnlinked() {
         const box = document.getElementById("linkAccountBox");
         box.innerHTML = `
-            <p class="catalog-toolbar">Link your Hexium account to Heximons.</p>
-            <input id="linkUsernameInput" type="text" placeholder="Your Hexium username" class="search-lg">
+            <p class="catalog-toolbar">
+                Link your Hexium account to Heximons. Go to your Hexium profile page \u2014
+                the number in the URL (e.g. hexium.zip/users/<strong>4</strong>/profile) is your User ID.
+            </p>
+            <input id="linkUsernameInput" type="text" inputmode="numeric" placeholder="Your Hexium User ID (numbers only)" class="search-lg">
             <button class="btn btn-primary" id="linkStartBtn">Get Verification Phrase</button>
             <p id="linkStatus"></p>
         `;
@@ -87,27 +90,28 @@
     }
 
     async function startLink() {
-        const username = document.getElementById("linkUsernameInput").value.trim();
+        const rawInput = document.getElementById("linkUsernameInput").value.trim();
+        const userId = Number(rawInput);
 
-        if (!username) {
-            showStatus("Enter a username first.");
+        if (!rawInput || !Number.isInteger(userId) || userId <= 0) {
+            showStatus("Enter a valid numeric Hexium User ID (not a username).");
             return;
         }
 
         showStatus("Looking up your account...");
 
         try {
-            const user = await window.hexiumLookupUsername(username);
+            const profile = await window.hexiumGetUser(userId);
 
-            if (!user) {
-                showStatus("No Hexium user found with that username.");
+            if (!profile || !profile.name) {
+                showStatus("No Hexium user found with that ID.");
                 return;
             }
 
             const response = await fetch("/api/account/start-link", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userId: user.id, username: user.name })
+                body: JSON.stringify({ userId: profile.id, username: profile.name })
             });
 
             const data = await response.json();
